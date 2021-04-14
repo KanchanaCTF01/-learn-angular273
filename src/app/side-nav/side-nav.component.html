@@ -1,0 +1,57 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport="true"
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'"
+      [opened]="!(isHandset$ | async)">
+    <mat-toolbar color="primary"> 
+      <img src="../../assets/pic/logo.png" alt="Logo" style="width: 180px;">
+      </mat-toolbar>
+    <mat-nav-list>
+      <div class="search">
+           <input type="text" placeholder="Search" />
+       </div>
+      <div *ngFor="let menuGroup of menuList">
+        <div *ngIf="menuGroup.menus.length == 0">
+          <a mat-list-item class="line" routerLinkActive="active" [routerLink]="['/app/'+menuGroup.group.code]">
+            <span>{{ menuGroup.group.name  }}</span>
+          </a>
+        </div>
+        <div *ngIf="menuGroup.menus.length > 0" [ngClass]="{'group-menu-selected': menuGroupSelected==menuGroup.group.code}">
+          <a mat-list-item class="line" (click)="selectMenu(menuGroup.group)">
+            <mat-icon>{{menuGroupSelected==menuGroup.group.code? 'keyboard_arrow_down': 'keyboard_arrow_right'}}</mat-icon>
+            <span>{{ menuGroup.group.name }}</span>
+          </a>
+          <div *ngIf="menuGroupSelected==menuGroup.group.code">
+            <a *ngFor="let menu of menuGroup.menus" mat-list-item class="line" routerLinkActive="active" [routerLink]="['/app/'+menuGroup.group.code+'/'+menu.code]">
+              <span>{{ menu.name }}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <mat-toolbar color="primary">
+         <div >
+           <span class="topnav" >John Smith</span>
+           <span class="topnav" ><a href="#">Logout</a></span>   
+           <button mat-icon-button class="example-icon" aria-label="Example icon-button with settings icon">
+             <mat-icon>settings</mat-icon>
+           </button>
+         </div>
+     </mat-toolbar>
+     </mat-toolbar>
+    <!-- Add Content Here -->
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
